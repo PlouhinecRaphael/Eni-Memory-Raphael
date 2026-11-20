@@ -1,9 +1,221 @@
-h1{
 
-    text-transform: uppercase;
-    text-align: center;
-}
+
+/* 
+   2. FOND DE LA PAGE ET TITRE
+   */
+
 
 body {
-    background-color: blueviolet;
+  min-height: 100vh;               /* au moins la hauteur de l'écran  */
+  font-family:"Open Sans", "Segoe UI", system-ui, sans-serif;
+  /* Dégradé en diagonale : 135deg va du coin haut gauche vers le coin bas droit. */
+  background: linear-gradient(135deg,#ff0000,#ffffff00);
+}
+
+/* Le grand titre « ENI - MEMORY - . */
+.titre-site {
+  font-family:"Raleway", "Segoe UI", system-ui, sans-serif;
+  font-size: 2.5rem;               /* 1rem = taille normale du texte :  2,5 fois plus grand */
+  color: white;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, .25);   /* ombre : vers la droite, vers le bas, flou, couleur */
+  margin-bottom: 1.25rem;
+}
+
+
+/* 
+   3. MENU  
+  */
+
+.menu {
+  display: inline-block;           /* la barre s'ajuste à la largeur des liens
+                                      (le "text-center" du <header> la centre) */
+  max-width: 100%;                 /* sur téléphone, elle ne dépasse jamais l'écran */
+  background-color: #333333;
+  border: 1px solid #cbcbcb;
+  border-radius: .4rem;            /* coins arrondis */
+  padding: .15rem .35rem;          /* espace à l'intérieur : haut/bas puis gauche/droite */
+  margin-bottom: 2rem;             /* espace sous le menu */
+}
+
+/* ".menu .nav-link" : un .nav-link situé À L'INTÉRIEUR d'un .menu . */
+.menu .nav-link {
+  color: white;
+  padding: .55rem 1rem;
+  border-radius: .3rem;
+}
+
+/* :hover = quand la souris passe sur le lien. */
+.menu .nav-link:hover {
+  color: #ffea02;
+  background-color: rgba(255, 255, 255, .1);   /* blanc très transparent */
+}
+
+/* ".nav-link.active" : sans espace entre les deux classes, cela veut dire
+   « un élément qui a À LA FOIS la classe nav-link et la classe active » :
+   c'est le lien de la page où l'on se trouve. */
+.menu .nav-link.active {
+  background-color: rgba(255, 255, 255, .18);
+  font-weight: 600;                /* texte plus gras */
+}
+
+
+/* 
+  4. PANNEAU DE CONTENU
+   Le « panneau » est le grand rectangle sombre qui contient le contenu de la page.
+   Sa largeur est réglée dans le HTML avec la grille Bootstrap (col-*). */
+.panneau {
+  background-color: #212121;
+  color: #f2f2f2;
+  border: 2px solid #cbcbcb;
+  border-radius: 1rem;
+  box-shadow: 0 .75rem 2rem rgba(0, 0, 0, .3);   /* ombre sous le panneau : décalage vertical, flou, couleur */
+}
+
+
+/* 
+   Chaque champ est rangé dans un <div class="champ"> : un libellé (label) et un champ (input). */
+.champ {
+  margin-bottom: 1.5rem;
+}
+
+.champ .form-label {
+  margin-bottom: .15rem;           /* libellé plus proche de son champ */
+  font-size: .95rem;
+}
+
+/* Champ sans cadre : fond transparent et un simple trait en dessous (comme la maquette). */
+.panneau .form-control {
+  background-color: transparent;
+  color: #f2f2f2;
+  border: 0;                       /* on enlève le cadre complet… */
+  border-bottom: 2px solid #d9d9d9;/* …pour ne garder que le trait du bas */
+  border-radius: 0;
+  padding-left: 0;                 /* le texte s'aligne avec le libellé */
+}
+
+
+
+
+
+/* 6. IMAGE DE L'ACCUEIL*/  
+  
+.apercu-memory {
+  display: block;
+  margin: 0 auto;                  /* "auto" à gauche et à droite : l'image est centrée */
+  max-width: 100%;                 /* jamais plus large que le panneau */
+  max-height: 20rem;               /* jamais plus haute que 20rem */
+  background-color: white;
+  border: 2px solid #cbcbcb;
+  border-radius: .5rem;
+}
+
+/* Légende sous l'image. */
+.panneau figcaption {
+  color: #b3b3b3;
+}
+
+
+/* 
+   7. PLATEAU ET CARTES  
+  
+    classes sont ajoutées par JavaScript sur ".carte" :
+    .retournee   la carte montre son image
+     .trouvee     la paire a été trouvée
+    */
+
+/* Le plateau : une grille. */
+.plateau {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);   /* 4 colonnes de même largeur : 12 cartes = 4 colonnes × 3 lignes */
+  gap: .75rem;                             /* espace entre les cartes */
+  max-width: 36rem;                        /* le plateau ne devient pas gigantesque sur grand écran */
+  margin: 1.5rem auto 0;                   /* "auto" à gauche et à droite : plateau centré */
+}
+
+/* La boîte de la carte. */
+.carte {
+  perspective: 800px;              /* (1) donne de la profondeur à la rotation : sans elle, la carte
+                                      aurait l'air de s'écraser au lieu de se retourner */
+  aspect-ratio: 1 / 1;             /* carte carrée : la hauteur est toujours égale à la largeur */
+  cursor: pointer;                 /* le curseur devient une main */
+}
+
+/* La « page » qui pivote. */
+.carte-interieur {
+  position: relative;              /* sert de repère pour placer les deux faces au même endroit */
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;    /* (2) les deux faces gardent leur position 3D à l'intérieur */
+  transition: transform .6s;       /* quand "transform" change, le changement dure 0,6 seconde au lieu d'être
+                                      instantané : c'est cela qui crée l'animation */
+}
+
+/* Quand JavaScript ajoute la classe "retournee", la page pivote de 180° (rotateY = autour de l'axe vertical). */
+.carte.retournee .carte-interieur {
+  transform: rotateY(180deg);
+}
+
+/* Les deux faces occupent exactement la même place, l'une sur l'autre. */
+.face-avant,
+.face-arriere {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;                   /* flex + les deux "center" : l'image est centrée dans la face */
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  border-radius: .6rem;
+  box-shadow: 0 .15rem .4rem rgba(0, 0, 0, .35);
+  backface-visibility: hidden;     /* (3) une face vue « de dos » devient invisible : sans cette ligne, on
+                                      verrait l'image à travers le « ? » */
+}
+
+/* (4) La face arrière est déjà tournée de 180° : quand la page pivote de 180° à son tour,
+   elle se retrouve face à nous, à l'endroit. */
+.face-arriere {
+  transform: rotateY(180deg);
+}
+
+/* Taille des images dans les cartes. */
+.face-avant img {
+  width: 55%;
+  height: auto;                    /* "auto" : la hauteur suit, l'image n'est pas déformée */
+}
+.face-arriere img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;             /* l'image garde ses proportions et tient en entier dans la zone */
+}
+
+/* Une paire trouvée : on ne peut plus cliquer dessus, et elle a un contour vert. */
+.carte.trouvee {
+  cursor: default;
+}
+.carte.trouvee .face-arriere {
+  border: 3px solid #08c708;
+}
+
+
+/* ============================================================================
+   8. PETITS ÉCRANS
+   ===========================================================================*/
+
+@media (max-width: 576px) {
+  .titre-site {
+    font-size: 1.8rem;             /* titre plus petit */
+  }
+  .menu {
+    padding: .1rem .2rem;
+  }
+  .menu .nav-link {
+    padding: .45rem .4rem;         /* liens du menu plus serrés : les 5 tiennent sur une ligne */
+    font-size: .85rem;
+  }
+  .plateau {
+    gap: .5rem;                    /* cartes plus rapprochées */
+  }
 }
